@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+	<head>
+	
+		<meta charset="UTF-8">
+		<title>Perfil</title>
+		<link rel="stylesheet" href="../css/bootstrap.min.css">
+		<link rel="stylesheet" href="../css/pagga.css">
+	
+		<style>
+			
+			#datatb-search {
+				border-bottom-right-radius: 0;
+				border-top-right-radius: 0;
+			}
+			
+			#datatb-btn-search {
+				border-top-left-radius:0;
+				border-bottom-left-radius:0;
+			}
+
+		</style>
+	
+	</head>
+	<body>
+		<main class="container">
+	
+			<h1>Perfil</h1>
+		
+			<div id="datatb-wrapper">
+		
+				<div class="form-group">
+					<label for="datatb-search">Pesquisar:</label>
+		
+					<div class="input-group">
+						<input id="datatb-search" type="search"
+							class="form-control" aria-controls="datatb" >
+						<button id="datatb-btn-search" class="btn btn-primary">Buscar</button>
+					</div>
+		
+				</div>
+		
+				<div id="div-datatb" class="table-responsive">
+		
+					<table id="datatb"
+						class="table table-striped table-sm table-bordered text-center">
+						<thead>
+							<tr>
+								<th class="datatb-th" aria-controls="datatb">Código</th>
+								<th class="datatb-th" aria-controls="datatb">Descrição</th>
+								<th class="datatb-th" aria-controls="datatb">Editar</th>
+							</tr>
+						</thead>
+						<tbody>
+		
+						</tbody>
+					</table>
+		
+				</div>
+		
+			</div>
+			<div class="float-right">
+				<a href="perfil-novo.html" id="btn-novoperfil" class="btn btn-primary">Novo
+					Perfil</a>
+			</div>
+	
+		</main>
+	
+		<script type="text/javascript" src="../js/jquery.js"></script>
+		<script type="text/javascript" src="../js/pagga.js"></script>
+	
+	
+		<script type="text/javascript">
+			$(document).ready(function() {
+				listaPerfils();
+			});
+	
+			function novaLinha(codigo, descricao) {
+				var linha = $("<tr>");
+				var colunaCodigo = $("<td>").text(codigo);
+				var colunaDescricao = $("<td>").text(descricao);
+				var colunaEditar = $("<td>");
+	
+				colunaDescricao.addClass("datatb-descricaoperfil");
+	
+				var link = $("<a>").text('Editar') //.attr("href", "perfil-novo.html")
+						.addClass("btn btn-light btn-editar btn-sm");
+	
+				colunaEditar.append(link);
+				
+				colunaDescricao.addClass("descricao");
+				colunaCodigo.addClass("codigo");
+	
+				linha.append(colunaCodigo);
+				linha.append(colunaDescricao);
+				linha.append(colunaEditar);
+	
+				return linha;
+			}
+			
+			$('#datatb-btn-search').click(pesquisaTable);
+	
+			function pesquisaTable() {
+				
+				let descricao = $('#datatb-search').val();
+				
+				if(descricao == ""){
+					$('table tbody tr').remove();
+					listaPerfils();
+				}else {
+				
+					console.log(descricao);
+					
+					Pagga.perfil.busca(descricao).done(function(jqXHR){
+						console.log(jqXHR);
+						
+						$('table tbody tr').remove();
+						
+						let json = $.parseJSON(jqXHR);
+						
+						let perfils = json.perfil;
+						
+						perfils.sort(function(a, b) {
+							return a.id - b.id;
+						})
+						
+						json.perfil.forEach(function(perfil){
+							
+							var linhas = novaLinha(perfil.id, perfil.descricao);
+							$("tbody").append(linhas);
+						})
+						
+						inicializaBotaoEditar();
+					});
+				}	
+			}
+			
+			function listaPerfils(){
+				Pagga.perfil.lista().done(function(jqXHR) {
+					
+					let perfils = jqXHR.perfis;
+	
+					perfils.sort(function(a, b) {
+						return a.id - b.id;
+					})
+	
+					jqXHR.perfis.forEach(function(perfil) {
+						var linhas = novaLinha(perfil.id, perfil.descricao);
+						$("tbody").append(linhas);
+					});
+					
+					inicializaBotaoEditar();
+				}).fail(function(jqXHR, textStatus, errorThrown ){
+					
+					var linha = $("<tr>");
+					var colunaCodigoVazio = $("<td>");
+					var colunaMensagem = $("<td>").text('Não a Perfis registrados!');
+					var colunaEditarVazio = $("<td>");
+		
+					linha.append(colunaCodigoVazio);
+					linha.append(colunaMensagem);
+					linha.append(colunaEditarVazio);
+					
+					$("tbody").append(linha);
+				})
+			}
+			
+			function inicializaBotaoEditar() {				
+				$(".btn-editar").on("click", function(event){
+					let desc = this.parentElement.parentElement.getElementsByClassName('descricao')[0].textContent;
+					let cod = this.parentElement.parentElement.getElementsByClassName('codigo')[0].textContent;
+					
+					var url = "../html/perfil-novo.html?codigo="+cod+"&descricao="+desc;
+					$(location).attr('href',url).attr("type", "hidden");
+				});
+			}
+		</script>
+	
+	</body>
+</html>

@@ -1,0 +1,70 @@
+$(document).ready(function() {
+	paginacaoTable();
+});
+
+function paginacaoTable() {
+	$('#div-datatb').after('<ul id="nav" class="pagination"></ul>');
+	var rowsShown = 5;
+	var rowsTotal = $('#datatb tbody tr').length;
+	var numPages = rowsTotal / rowsShown;
+	for (i = 0; i < numPages; i++) {
+		var pageNum = i + 1;
+		$('#nav')
+				.append(
+						'<li class="paginate_button page-item previous"><a class="page-link" href="#" rel="'
+								+ i + '">' + pageNum + '</a></li> ');
+	}
+	$('#datatb tbody tr').hide();
+	$('#datatb tbody tr').slice(0, rowsShown).show();
+	$('#nav a:first').addClass('active');
+	$('#nav a').on(
+			'click',
+			function() {
+
+				$('#nav a').removeClass('active');
+				$(this).addClass('active');
+				var currPage = $(this).attr('rel');
+				var startItem = currPage * rowsShown;
+				var endItem = startItem + rowsShown;
+				$('#datatb tbody tr').css('opacity', '0.0').hide().slice(
+						startItem, endItem).css('display', 'table-row').css(
+						'opacity', '1.0');
+			});
+}
+
+
+function pesquisaTable () {
+	 // Declare variables
+    var input, filter, table, tr, td, i, j, tds, ths, matched;
+    input = document.getElementById("datatb-search");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("datatb");
+    tr = document.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide
+    for (i = 0; i < tr.length; i++) {
+    	td = tr[i].getElementsByClassName('datatb-descricaoperfil')[0];
+    		if (td) {
+				  txtValue = td.textContent || td.innerText;
+				if (txtValue.toUpperCase().indexOf(filter) > -1) {
+					tr[i].style.display = "";
+				} else {
+					tr[i].style.display = "none";
+				}
+    		}
+    }
+}
+$("#botao-salvar").click(function() {
+	var descricao = $("#descricao-perfil").val();
+	if (descricao != "") {
+		$(".alert-success").toggle();
+		setTimeout(function() {
+			$(".alert-success").toggle();
+		}, 2000);
+	} else {
+		$(".alert-danger").toggle();
+		setTimeout(function() {
+			$(".alert-danger").toggle();
+		}, 2000);
+	}
+});

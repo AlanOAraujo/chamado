@@ -1,0 +1,179 @@
+var Pagga = Pagga || {};
+
+Pagga.perfil = {};
+
+Pagga.usuario = {};
+
+Pagga.perfil.salva = function(codigo, descricao){
+	
+	if (codigo == ""){
+		var obj = {
+			descricao : descricao
+		};
+	} else {
+		var obj = {
+			id : codigo,
+			descricao : descricao
+		};
+	}
+
+	return $.ajax({
+		  contentType: 'application/json',
+		  type: "POST",
+		  url: '../perfil',
+		  data: JSON.stringify(obj),
+		  dataType: 'json'
+	});
+	
+}
+
+Pagga.perfil.exclui = function(codigo){
+
+	var obj = {
+			id : codigo
+	};
+	
+	return $.ajax({
+		  contentType: 'application/json',
+		  type: "DELETE",
+		  url: '../perfil',
+		  data: JSON.stringify(obj),
+		  dataType: 'json'
+	});
+	
+}
+
+Pagga.perfil.lista = function( ){
+	
+	let request = $.ajax({
+	  method: "GET",
+	  url: "../perfil",
+	  dataType: "json"
+	});
+	
+	return request; 
+	
+}
+
+Pagga.perfil.busca = function(descricao){
+	
+	var data = {
+			descricao : descricao
+			}
+	
+	return $.ajax({
+		type: "POST",
+		url: "../perfil/descricao",
+		data: data,
+		dataType: "text"
+	});
+}
+
+Pagga.perfil.busca.id = function(id) {
+	
+	var data = {
+			id : id
+			}
+	
+	return $.ajax({
+		type: "POST",
+		url: "../perfil/id",
+		data: data,
+		dataType: "text"
+	});
+}
+
+Pagga.usuario.salva = function(nome, email, cpf, senha, ativo, perfis){
+	
+	var data = {
+			nome : nome,
+			email : email,
+			cpf : cpf,
+			senha : senha,
+			ativo : ativo,
+			usuarioPerfilList : []
+	};
+	
+	perfis.forEach(function(perfil) {
+		data.usuarioPerfilList.push({
+			perfil : {
+				id : perfil
+			}
+		});
+	});
+	
+	return $.ajax({
+		  contentType: 'application/json',
+		  type: "POST",
+		  url: '../usuario',
+		  data: JSON.stringify(data),
+		  dataType: 'json'
+	});
+}
+
+Pagga.usuario.altera = function(id, nome, email, cpf, senha, ativo, perfis){
+	
+	var data = {
+			id : id,
+			nome : nome,
+			email : email,
+			cpf : cpf,
+			senha : senha,
+			ativo : ativo,
+			usuarioPerfilList : []
+	};
+	
+	perfis.forEach(function(perfil) {
+		data.usuarioPerfilList.push({
+			perfil : {
+				id : perfil
+			}
+		});
+	});
+	
+	return $.ajax({
+		  contentType: 'application/json',
+		  type: "POST",
+		  url: '../usuario/altera',
+		  data: JSON.stringify(data),
+		  dataType: 'json'
+	});
+}
+
+Pagga.usuario.lista = function() {
+	
+	return $.ajax({
+	  method: "GET",
+	  url: "../usuario",
+	  dataType: "json"
+	});
+	
+}
+
+Pagga.usuario.busca = function(id) {
+	
+	var data = {
+			id : id
+			}
+	
+	return $.ajax({
+		type: "POST",
+		url: "../usuario/id",
+		data: data,
+		dataType: "text"
+	});
+	
+}
+
+Pagga.chamado.busca = function(id) {
+	var data = {
+			id : id
+			}
+	
+	return $.ajax({
+		type: "POST",
+		url: "../usuario/id",
+		data: data,
+		dataType: "text"
+	});
+}

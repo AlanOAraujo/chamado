@@ -1,0 +1,18 @@
+package br.com.pagga.chamado.dao;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+
+import br.com.pagga.chamado.model.HistoricoChamado;
+
+public class HistoricoChamadoDAO extends AbstractDAO<HistoricoChamado> {
+
+	public HistoricoChamadoDAO() {
+	}
+	
+	@Inject
+	public HistoricoChamadoDAO(EntityManager entityManager) {
+		super(entityManager);
+	}
+
+}

@@ -1,0 +1,18 @@
+package br.com.pagga.chamado.model;
+
+public enum StatusChamado {
+
+	ABERTO("Aberto"),
+	EM_ATENDIMENTO("Em atendimento"), 
+	FECHADO("Fechado");
+	
+	private String descricao;
+	
+	private StatusChamado(String decricao) {
+		this.descricao = decricao;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+}

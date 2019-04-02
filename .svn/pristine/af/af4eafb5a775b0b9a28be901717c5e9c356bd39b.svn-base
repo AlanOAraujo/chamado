@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../css/bootstrap.min.css">
+<title>Chamado</title>
+</head>
+<body>
+	<main class="container">
+	<h1>Chamado</h1>
+	<div class="row">
+		<div class="col-md-3">
+			<div class="row">
+				<div class="col-md">
+					<label for="selectStatus">Status</label>
+					<select id="selectStatus">
+						<option>Aberto</option>
+						<option>Em Andamento</option>
+						<option>Finalizado</option>
+					</select>
+				</div>
+				<div class="col-md">
+					<label for="selectPrioridade">Prioridade</label>
+					<select id="selectPrioridade">
+						<option>Alta</option>
+						<option>Media</option>
+						<option>Baixa</option>
+					</select>
+				</div>
+			</div>
+			<div>
+				<div class="form-group">
+					<label for="previsao">Previsão de solução</label>
+					<input type="date" id="previsao">
+				</div>
+				<div class="form-group">
+					<label for="nomeSolicitante">Solicitante</label>
+					<input id="nomeSolicitante" disabled="disabled">
+				</div>
+				<div class="form-group">
+					<label for="categoria">Categoria</label>
+					<select id="categoria">
+						<option>Dúvida</option>
+						<option>Problema</option>
+						<option>Solicitação de Serviços</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="tags" style="width: 100%">Tags</label>
+					<input id="tags" disabled="disabled">
+				</div>
+			</div>
+		</div>
+		<div class="col-md">
+			<div class="row">
+				<label for="acao">Ação pública</label>
+				<textarea rows="6" id="acao" style="width: 100%"></textarea>
+			</div>
+			<div class="row float-right">
+				<select id="opcaoStatus" style="margin-top: 0.5em; margin-right: 0.5em">
+					<option>Manter status atual</option>
+					<option>Finalizado</option>
+				</select>
+				<button class="btn btn-primary" style="margin-top: 0.5em; margin-right: 0.5em">Adicionar ação</button>
+			</div>
+			<div class="row" style="width: 100%">
+				<label for="historico" style="width: 100%">Histórico</label>
+				<textarea rows="6" style="width: 100%"></textarea>
+			</div>
+		</div>
+	</div>
+	</main>
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script type="text/javascript" src="../js/pagga.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			
+		})
+	</script>
+</body>
+</html>

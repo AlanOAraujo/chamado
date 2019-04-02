@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8">
+		<title>Perfil</title>
+		<link rel="stylesheet" href="../css/bootstrap.min.css">
+		<link rel="stylesheet" href="../css/pagga.css">
+		<style>
+			#datatb-search {
+				border-bottom-right-radius: 0;
+				border-top-right-radius: 0;
+			}
+			
+			#datatb-btn-search {
+				border-top-left-radius:0;
+				border-bottom-left-radius:0;
+			}
+			
+			#message{
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<main class="container">
+	
+			<h1>Usuários</h1>
+			
+			<div id='message' class='alert'></div>
+		
+			<div id="datatb-wrapper">
+		
+				<div class="form-group">
+					<label for="datatb-search">Pesquisar:</label>
+		
+					<div class="input-group">
+<!-- 						<select> -->
+<!-- 							<option value="teste">teste</option> -->
+<!-- 						</select> -->
+						<input id="datatb-search" type="search" class="form-control" aria-controls="datatb" >
+						<button id="datatb-btn-search" class="btn btn-primary">Buscar</button>
+					</div>
+		
+				</div>
+				
+				<div id="div-datatb" class="table-responsive">
+		
+					<table id="datatb"
+						class="table table-striped table-sm table-bordered text-center">
+						<thead>
+							<tr>
+								<th class="datatb-th" aria-controls="datatb">Nome</th>
+								<th class="datatb-th" aria-controls="datatb">CPF</th>
+								<th class="datatb-th" aria-controls="datatb">E-mail</th>
+								<th class="datatb-th" aria-controls="datatb">Ativo</th>
+								<th class="datatb-th" aria-controls="datatb">Editar</th>
+							</tr>
+						</thead>
+						<tbody>
+		
+						</tbody>
+					</table>
+		
+				</div>
+		
+			</div>
+			<div class="float-right">
+				<a href="usuario-novo.html" id="btn-novoUsuario" class="btn btn-primary">Novo Usuário</a>
+			</div>
+	
+		</main>
+	
+		<script type="text/javascript" src="../js/jquery.js"></script>
+		<script type="text/javascript" src="../js/pagga.js"></script>
+	
+	
+		<script type="text/javascript">
+			$(document).ready(function() {
+				listaUsuarios();
+			});
+			
+			function novaLinha(id, nome, cpf, email, ativo) {
+				var linha = $("<tr>");
+				var colunaId = $("<td>").text(id);
+				var colunaNome = $("<td>").text(nome);
+				var colunaEmail = $("<td>").text(email);
+				var colunaCpf = $("<td>").text(cpf);
+				var colunaAtivo = $("<td>").text(ativo == true ? "Sim" : "Não");
+				var colunaEditar = $("<td>");
+			
+				var link = $("<a>").text('Editar').addClass("btn btn-light btn-editar btn-sm");
+				
+				colunaEditar.append(link);
+				colunaId.addClass("idUsuario");
+				
+				linha.append(colunaId);
+				linha.append(colunaNome);
+				linha.append(colunaCpf);
+				linha.append(colunaEmail);
+				linha.append(colunaAtivo);
+				linha.append(colunaEditar);
+				
+				colunaId.attr("style", "display: none");
+	
+				return linha;
+			}
+
+			$('#datatb-btn-search').on('click',function(){
+				pesquisaTable();
+			});
+	
+			function pesquisaTable() {
+				
+				let descricao = $('#datatb-search').val();
+				
+				if(descricao == ""){
+					$('table tbody tr').remove();
+					listaPerfils();
+				}else {
+					
+					Pagga.perfil.busca(descricao).done(function(jqXHR){
+						console.log(jqXHR);
+						
+						$('table tbody tr').remove();
+						
+						let json = $.parseJSON(jqXHR);
+						
+						let perfils = json.perfil;
+						
+						perfils.sort(function(a, b) {
+							return a.id - b.id;
+						})
+						
+						json.perfil.forEach(function(perfil){
+							
+							var linhas = novaLinha(perfil.id, perfil.descricao);
+							$("tbody").append(linhas);
+							
+						})
+						
+						inicializaBotaoEditar();
+						
+					}).fail(function(jqXHR, textStatus, errorThrown) {
+						console.log(jqXHR);
+						var error = JSON.parse(jqXHR.responseText);
+						mostraDialogo('#message', 3000)
+						$('#message').removeClass();
+						$('#message').text(error.message);
+						$('#message').addClass('alert');
+						$('#message').addClass('alert-danger');
+						$('#message').addClass('alert-dismissible');
+						
+					});
+				}
+			}
+			
+			function listaUsuarios(){
+				Pagga.usuario.lista().done(function(jqXHR) {
+					
+					let usuarios = jqXHR.usuarios;
+	
+					usuarios.sort(function(a, b) {
+						return a.nome - b.nome;
+					});
+	
+					jqXHR.usuarios.forEach(function(usuario) {
+						var linhas = novaLinha(usuario.id, usuario.nome, usuario.cpf, usuario.email, usuario.ativo);
+						$("tbody").append(linhas);
+					});
+					
+					inicializaBotaoEditar();
+				}).fail(function(jqXHR, textStatus, errorThrown ){
+					
+					var linha = $("<tr>");
+					var colunaCodigoVazio = $("<td>");
+					var colunaMensagem = $("<td>").text('Não a Perfis registrados!');
+					var colunaEditarVazio = $("<td>");
+		
+					linha.append(colunaCodigoVazio);
+					linha.append(colunaMensagem);
+					linha.append(colunaEditarVazio);
+					
+					$("tbody").append(linha);
+				})
+			}
+						
+			function inicializaBotaoEditar() {
+				$(".btn-editar").on("click", function(event){
+					let id = this.parentElement.parentElement.getElementsByClassName('idUsuario')[0].textContent;
+					console.log(id);
+					
+					var url = "../html/usuario-novo.html?id="+id;
+					$(location).attr('href',url);
+				});
+			}
+			
+			function mostraDialogo(mensagem, tempo){
+					
+			    $('#message').stop().fadeTo(1, 1).removeClass('hidden');
+			    
+			    setTimeout(function() {
+			        $('#message').fadeTo(300, 0).slideUp(300, function(){
+			        	$('#message').text('').addClass('hidden');
+			        });
+			    }, tempo);
+
+			}
+			
+		</script>
+	
+	</body>
+</html>

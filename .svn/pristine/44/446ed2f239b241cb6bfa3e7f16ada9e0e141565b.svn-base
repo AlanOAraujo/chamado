@@ -1,0 +1,301 @@
+{
+	"info": {
+		"_postman_id": "cada5a20-635b-433a-a3b9-6e6a65e5824c",
+		"name": "API - Chamado",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Lista Rotinas",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/chamado/rotina",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chamado",
+						"rotina"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lista Perfil",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/chamado/perfil",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chamado",
+						"perfil"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Salva Perfil",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\n\t\"descricao\":\"\"\n\t\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/chamado/perfil",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chamado",
+						"perfil"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deletar Perfil",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "id",
+						"value": "5",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"1\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/chamado/perfil?",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chamado",
+						"perfil"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "5",
+							"disabled": true
+						},
+						{
+							"key": "descricao",
+							"value": "Gestor",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Atualizando Perfil",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":13,\"descricao\":\"Freks and Geeks and Nerds\"}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/chamado/perfil",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chamado",
+						"perfil"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lista Perfil-Rotina-Atributo",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/chamado/perfil-rotina-atributo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chamado",
+						"perfil-rotina-atributo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deletar Perfil-Rotina-Atributo",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\n    \"id\": \"1\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/chamado/perfil-rotina-atributo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chamado",
+						"perfil-rotina-atributo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Salvar Perfil-Rotina-Atributo",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"perfil\":{\n\t\t\"id\":\"1\"\n\t},\t\n\t\"rotina\":{\n\t\t\"id\":\"5\"\n\t},\n    \"atributo\":{\n    \t\"id\": \"7\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/chamado/perfil-rotina-atributo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chamado",
+						"perfil-rotina-atributo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Abertura Chamado",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"titulo\":\"Teste no Titulo\",\n\t\"descricao\":\"Estamos efetuando os teste para abertura de chamados!\",\n\t\"dataAbertura\": \"2018-12-21T16:51:56-0300\",\n\t\"status\":\"ABERTO\",\n\t\"tipo\":\"INCIDENTE\",\n\t\"usuario\":{\n\t\t\"id\":\"2\"\n\t},\n\t\"marcacaoChamadoList\":[\n\t\t\t{\n\t\t\t\"descricao\": \"#Sextou\"\n\t\t\t}\n\t]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/chamado/chamado",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chamado",
+						"chamado"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

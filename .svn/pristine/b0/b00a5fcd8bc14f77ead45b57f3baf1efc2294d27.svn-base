@@ -1,0 +1,63 @@
+package br.com.pagga.chamado.dao;
+
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
+import br.com.pagga.chamado.model.HistoricoChamado;
+
+public class HistoricoChamadoDAO extends AbstractDAO<HistoricoChamado> {
+
+	public HistoricoChamadoDAO() {
+	}
+	
+	@Inject
+	public HistoricoChamadoDAO(EntityManager entityManager) {
+		super(entityManager);
+	}
+
+	public List<HistoricoChamado> listHistorico(int pageNumber,  int pageSize){
+		
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+
+		CriteriaQuery<HistoricoChamado> criteria = builder.createQuery(getClazz());
+
+		Root<HistoricoChamado> root = criteria.from(getClazz());
+		
+		criteria.select(root);
+		
+		criteria.orderBy(builder.desc(root.get("id")));
+		
+		TypedQuery<HistoricoChamado> query = entityManager.createQuery(criteria);
+		
+		if(pageNumber > 0) {
+			query.setFirstResult(pageNumber);
+		}
+		
+		if(pageSize > 0) {
+			query.setMaxResults(pageSize);
+		}
+		
+		return  query.getResultList();
+	}
+	
+	public Long countHistorico(){
+		
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		
+		CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
+
+		countQuery.select(builder.count(countQuery.from(HistoricoChamado.class)));
+		
+		TypedQuery<Long> query = entityManager.createQuery(countQuery);
+
+		return  query.getSingleResult();
+	}
+	
+	
+}

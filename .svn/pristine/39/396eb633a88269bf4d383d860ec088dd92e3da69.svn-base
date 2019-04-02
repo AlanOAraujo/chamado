@@ -1,0 +1,49 @@
+package br.com.pagga.chamado.dao;
+
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
+import br.com.pagga.chamado.model.Perfil;
+
+public class PerfilDAO extends AbstractDAO<Perfil> {
+
+	public PerfilDAO() {
+	}
+	
+	@Inject
+	public PerfilDAO(EntityManager entityManager) {
+		super(entityManager);
+	}
+	
+	public List<Perfil> findByDescricao(String descricao) {
+		
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+
+		CriteriaQuery<Perfil> criteria = builder.createQuery(getClazz());
+
+		Root<Perfil> root = criteria.from(Perfil.class);
+
+		criteria.select(root).where(builder.like(builder.lower(root.get("descricao")), "%" + descricao.toLowerCase() + "%"));
+
+		TypedQuery<Perfil> query = entityManager.createQuery(criteria);
+
+		List<Perfil> perfils = null;
+		
+		try {
+			perfils = query.getResultList();
+		}catch (NoResultException e) {
+			 return null;
+		}
+			
+		return perfils;
+		
+	}
+	
+}

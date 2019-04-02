@@ -1,0 +1,77 @@
+#novo-perfil {
+	width: 400px;
+	height: 300px;
+	vertical-align: middle;
+	border-style: none;
+}
+
+#descricao-label, #codigo-label {
+	margin-top: 20px;
+	display: block;
+	padding-left: 5px;
+}
+
+#codigo-perfil, #descricao-perfil {
+	margin-left: 5px;
+}
+
+#descricao-perfil {
+	width: 360px;
+}
+
+h1 {
+	font-size: 24px;
+}
+
+#botao-sair, #botao-salvar {
+	margin: 10px;
+	margin-top: 15px;
+	float: right;
+}
+
+#datatb-filtro input{
+	width: auto;
+	display: inline-block;
+	margin-left: 0.4em;
+}
+
+#datatb{
+	width: 100%;
+	margin-bottom : 0.5em;
+    table-layout: fixed;
+}
+
+.datatb-btneditar, .datatb-descricaoperfil, .datatb-th{
+	text-align: center;
+}
+
+.btn-editar{
+	font-size: 0.8rem;
+}
+
+td, th {
+	border: 0.1em solid #ccc;
+}
+
+/* #datatb tbody tr {
+  display: none;
+} */
+
+#datatb-filtro input{
+	width: auto;
+	display: inline-block;
+	margin-left: 0.4em;
+}
+
+.alert {
+	display: none;
+	clear: both;
+}
+
+.datatb-btneditar, .datatb-descricaoperfil, .datatb-th{
+	text-align: center;
+}
+
+.btn-editar{
+	font-size: 0.8rem;
+}

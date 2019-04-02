@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../css/bootstrap.min.css">
+<link rel="stylesheet" href="../css/all.css">
+<link rel="stylesheet" href="../css/pagga.css?version=12">
+<title>Central de Atendimento</title>
+</head>
+<body>
+	<form id="formLogin" class="container">
+		
+		<div id='message' class='alert'></div>
+		
+		<div id="divLoginMiddle" class="container">
+			<div class="row">
+				<div class="col-md-3"></div>
+				
+				<div class="col-md">
+					<div class="form-group" id="divUsuarioCpf">
+						<div class="text-center">
+							<img src="../images/paggacopyright.png" alt="Logo marca da Pagga" class="img-responsive">
+						</div>	
+					</div>
+					
+					<div class="form-group" id="divUsuarioCpf">
+						<label for="inputCPF">CPF</label> 
+						<input id="inputCPF" type="text"  class="form-control" name="cpf">
+					</div>
+					
+					<div class="form-group" id="divUsuarioCpf">
+						<label for="inputPass">SENHA</label> 
+						<input id="inputPass" type="password"  class="form-control" name="senha">
+					</div>
+					
+					<div class="form-group" id="divBtnAcessar">
+						<input id='btnAcessar' class="btn btn-primary form-control" type="button" value="Acessar">
+					</div>
+					
+					<div class='form-group'>
+						<button id='btnEsqSenha' data-toggle="modal" type="button" data-target="#forgetModal" class='btn btn-link'>Esqueceu a senha?</button>
+					</div>
+				</div>
+				
+				<div class="col-md-3"></div>
+			</div>
+		</div>	
+	</form>
+	
+	<div class="modal fade" id="forgetModal" tabindex="-1" role="dialog"
+		aria-labelledby="forgetModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header" id="modal-header-login">
+					<div id="forgetModalLabel">
+						<img src="../images/paggacopyright.png" alt="Logo marca da Pagga" class="img-responsive">
+					</div>	
+				</div>
+
+				<div class="modal-body" id="divForgetBody">
+					<form id="formSenha" class="container">	
+						<div class="form-group" id="divForgetCpf">
+							<label for="inputForgetCPF">CPF</label> 
+							<input id="inputForgetCPF" type="text"  class="form-control" name="cpf">
+						</div>
+						<div class="form-group" id="divForgetEmail">
+							<label for="inputForgetEmail">E-MAIL</label> 
+							<input id="inputForgetEmail" type="text"  class="form-control" name="email">
+						</div>
+						
+						<!-- <div class="form-group">
+							<div id="divCaptcha" class="g-recaptcha" data-sitekey="6Leh7o8UAAAAAG9gyhmQkOyjxSlFYdrEXPXkX7vN"></div>
+						    <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+						    <input type="hidden" name="action" value="validate_captcha">
+	                    </div> -->
+					</form>	
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" id="btnConfimarSenha" class="btn btn-primary" data-dismiss="modal">Confirmar</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Ignorar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script type="text/javascript" src="../js/pagga.js"></script>
+	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js/all.js"></script>
+	<!-- <script src="https://www.google.com/recaptcha/api.js?render=6Leh7o8UAAAAAG9gyhmQkOyjxSlFYdrEXPXkX7vN"></script>
+	<script>
+		grecaptcha.ready(function() {
+		    grecaptcha.execute('6Leh7o8UAAAAAG9gyhmQkOyjxSlFYdrEXPXkX7vN', {action: 'homepage'}).then(function(token) {
+				document.getElementById('g-recaptcha-response').value = token;
+		    });
+		});
+	</script> -->
+	  
+	<script type="text/javascript">
+		$(document).ready(function() {
+			
+			var form = $("#formLogin");
+			
+			form.on("keypress", function(e) {
+				if ((e.keyCode == 10)||(e.keyCode == 13)) {
+			    	e.preventDefault();
+		        }
+		    });
+			
+			$("#btnAcessar").click(function(event) {
+				event.preventDefault();
+				
+				var inputCPF = $("#inputCPF").val();
+				var inputSenha = $("#inputPass").val();
+				
+				Pagga.login.autentifica(inputCPF, inputSenha).done(function(jqXHR) {
+					window.location.href = '../html/chamado.html';
+					
+				}).fail( function(erro){
+					const json = JSON.parse(erro.responseText);
+					exibeMensagem(json.message);
+				} );
+				
+			});
+			
+		});
+		
+		$("#btnConfimarSenha").on("click",function(e) {
+			e.preventDefault();
+			
+			var form = document.getElementById('formSenha');
+			
+			let emailUsuario = $("#inputForgetEmail").val();
+			let cpfUsuario = $("#inputForgetCPF").val();
+			
+			const formulario = new FormData(form);
+			formulario.set('emailUsuario',emailUsuario);
+			formulario.set('cpfUsuario',cpfUsuario);
+			/* formulario.set('gRecaptcha',grecaptcha); */ 
+			Pagga.login.esquece(formulario).done(function(jqXHR) {
+				exibeMensagem(jqXHR.mensagem,true);
+			}).fail( function(erro){
+				const json = JSON.parse(erro.responseText);
+				exibeMensagem(json.message);
+			} );
+			
+		});
+		
+		function exibeMensagem(msg, sucesso) {
+			if (sucesso) {
+				mostraDialogo('#message', 3000);
+				$('#message').text(msg);
+				$('#message').removeClass('hide');
+				$('#message').addClass('alert');
+				$('#message').addClass('alert-success');
+				$('#message').addClass('alert-dismissible');
+			} else {
+				mostraDialogo('#message', 3000);
+				$('#message').text(msg);
+				$('#message').removeClass('hide');
+				$('#message').addClass('alert');
+				$('#message').addClass('alert-danger');
+				$('#message').addClass('alert-dismissible');
+			}
+		}
+		
+		function mostraDialogo(mensagem, tempo) {
+
+			$('#message').stop().fadeTo(1, 1).removeClass('hidden');
+
+			setTimeout(function() {
+				$('#message').fadeTo(300, 0).slideUp(300, function() {
+					$('#message').text('').addClass('hidden');
+				});
+			}, tempo);
+		}
+		
+	</script>
+	
+</body>
+</html>

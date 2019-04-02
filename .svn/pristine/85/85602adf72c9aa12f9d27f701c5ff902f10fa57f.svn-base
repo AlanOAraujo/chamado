@@ -1,0 +1,155 @@
+body,html{
+	height: 100%;
+}
+
+#datatb-search {
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+}
+
+#datatb-btn-search {
+	border-top-left-radius:0;
+	border-bottom-left-radius:0;
+}
+
+#message{
+	display: none;
+}
+
+#div-search-chm{
+	margin-top:0.5rem;
+}
+
+#input-search-ticket{
+	width: 10rem;
+}
+			
+#historicoDiv {
+	height: 12rem; 
+	background-color: #EEEEEE; 
+	overflow-y: scroll;
+}
+
+#btnFechamento{
+	width: 100%;
+}
+
+#divJstree{
+	width: 100%;
+    height: 15rem;
+    overflow: auto;
+}
+
+#divLoginMiddle {
+	margin:2rem;
+}
+
+#modal-header-login{
+	justify-content: center;
+}
+
+.paragrafo-info{
+	font-size: small;
+    font-family: sans-serif;
+}
+
+.campo-obrigatorio{
+	color: #ff0000;
+}
+
+#divPerfilAcessoUsuario{
+	padding: 1rem;
+}
+
+#input-search-ticket{
+	border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}   
+
+#btn-ticket-search{
+	border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+@media ( max-width :1024px) {
+	.chm-tabelas .container .row{
+		display:inherit;
+	}
+}
+
+.imgPagga{
+	width: 4rem;
+}
+
+#row-usuarios, #row-perfis, #row-usuario-novo, #row-perfil-novo, #row-historico, #row-chamados, #row-chamado-novo{
+	height: 100%;
+} 
+
+.col-navegation{
+	float: left; 
+	height: 100%; 
+	position: fixed;
+	width: 17%
+}
+
+.col-formulario{
+	float: right; 
+	height: 100%;
+	width: 83%
+}
+
+.header-navigation{
+	height: 100%
+}
+   
+.div-imgPagga{
+	text-align: center;
+	width: 100%;
+	margin-left: 0px;
+	padding: 1rem;
+}
+
+.navbar-telas{
+	padding-right: 0rem;
+    padding-left: 0rem;
+}
+
+.navbar-nav>li:first-child{
+	border-top: 1px #e5e5e5 solid
+} 
+
+.navbar-nav>li {
+	border-bottom: 1px #e5e5e5 solid;
+}
+
+.navbar-nav>li:hover {
+	font-weight: bold;
+}
+
+.navbar-nav .active{
+	font-weight: bold;
+	background-color: #007bff;
+}
+
+.navbar-nav>li>a {
+	padding-left: 1rem;
+	text-decoration:none;
+	color: #000000;
+	padding: 0.9rem;
+}
+
+.navbar-nav .nav-link{
+	padding-left: 1rem;
+}
+
+.header-navigation{
+	border-right: 1px #c7c4c4 solid;
+	padding-right: 0rem;
+}
+
+.btn-menu{
+	float: left;
+	margin-top: 1rem;
+	border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}

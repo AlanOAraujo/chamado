@@ -1,0 +1,188 @@
+package br.com.pagga.chamado.controller;
+
+import java.io.IOException;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import br.com.caelum.vraptor.Consumes;
+import br.com.caelum.vraptor.Controller;
+import br.com.caelum.vraptor.Get;
+import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.Post;
+import br.com.caelum.vraptor.serialization.gson.WithoutRoot;
+import br.com.pagga.chamado.dao.UsuarioDAO;
+import br.com.pagga.chamado.model.Usuario;
+import br.com.pagga.chamado.security.Open;
+import br.com.pagga.chamado.security.UsuarioLogado;
+import br.com.pagga.chamado.service.EmailService;
+import br.com.pagga.chamado.service.LoginService;
+import br.com.pagga.chamado.service.UsuarioService;
+import br.com.pagga.chamado.service.exception.BusinessException;
+
+@Controller
+@Path("/login")
+public class LoginController extends PaggaController {
+
+	private LoginService loginService;
+	
+	private UsuarioLogado usuarioLogado;
+	
+	@Inject
+	private UsuarioService usuarioService; 
+	
+	@Inject
+	private UsuarioDAO usuarioDAO;
+	
+	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+
+	public LoginController() {
+	}
+	
+	@Inject
+	public LoginController(LoginService loginService, HttpServletResponse response, UsuarioLogado usuarioLogado) {
+		super();
+		this.loginService = loginService;
+		this.usuarioLogado = usuarioLogado;
+		this.response = response;
+	}
+	
+	@Post 
+	@Get
+	@Open
+	@Path("")
+	@Consumes( value = "application/json", options=WithoutRoot.class )
+	public void autentificaLogin(Usuario usuario) {
+		
+		Usuario usuarioAutentifica = loginService.autentificaLogin(usuario);
+		
+		try {
+		
+			if (usuarioAutentifica == null) {
+				createJSON().message("Usuario não encontrado.").notFound();
+			} else {
+				
+				usuarioLogado.fazLogin(usuarioAutentifica);
+				
+				//System.out.println(usuarioLogado.getUsuario());
+				
+				JSONObject jsonObjectUsuario = createJSON()
+						.put("cpf", usuarioAutentifica.getCpf())
+						.put("senha", usuarioAutentifica.getSenha())
+						.build();
+				
+				createJSON().put("usuario", jsonObjectUsuario).ok();
+			}
+		} catch (BusinessException ex) {
+			logger.error(ex.getMessage());
+			createJSON().failure(ex.getMessage()).serverError();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+			createJSON().failure("Erro ao efetuar login").serverError();
+		}
+	}
+	
+	
+	@Get
+	@Open
+	@Path("/verifica")
+	public void  verificaLogin() {
+		try {
+			
+			if(usuarioLogado.getUsuario() != null) {
+				
+				JSONObject jsonObjectUsuario = createJSON()
+						.put("id", usuarioLogado.getUsuario().getId())
+						.put("email", usuarioLogado.getUsuario().getEmail())
+						.put("nome", usuarioLogado.getUsuario().getNome())
+						.put("situacao", usuarioLogado.getUsuario().isSituacao())
+						.build();
+				
+				createJSON().put("usuario", jsonObjectUsuario).ok();
+			}else {
+				createJSON().failure("Usuário não esta logado").serverError();
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			createJSON().failure("Erro no login").serverError();
+		}
+		
+	}
+	
+	@Get
+	@Open
+	@Path("/desloga")
+	public void  desloga() {
+		try {
+			usuarioLogado.desloga();
+			
+			createJSON().put("usuario", "Deslogado").ok();
+		} catch (Exception e) {
+			e.printStackTrace();
+			createJSON().failure("Erro no login").serverError();
+		}
+		
+	}
+	
+	@Post
+	@Open
+	@Path("/senha")
+	public void esqueceSenha(String emailUsuario, String cpfUsuario) throws IOException {
+		
+		Usuario usuarioSolicitante = usuarioDAO.findByCPF(cpfUsuario);
+		
+		//String gRecaptchaResponse = gRecaptcha;
+		//System.out.println(gRecaptchaResponse);
+		//boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
+		
+		String nomeUsuario = usuarioSolicitante.getNome();
+		String senhaRandomica = gerarSenha();
+
+		//System.out.println("User=" + userCPF + "::password=" + password + "::Captcha Verify"+verify);
+		
+		try {
+			if(emailUsuario.equals(usuarioSolicitante.getEmail())) {
+				usuarioSolicitante.setSenha(senhaRandomica);
+				
+				usuarioService.alterarUsuario(usuarioSolicitante);
+				
+				String senhaUsuario = usuarioSolicitante.getSenha();
+				
+				EmailService.emailEsqueceSenha(emailUsuario, nomeUsuario, senhaUsuario, cpfUsuario);
+				
+				createJSON().put("mensagem", "Email enviado para "+emailUsuario+" com nova senha").ok();
+			}else {
+				createJSON().failure("E-mail informado, esta diferente do e-mail registrado").serverError();
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			createJSON().failure("Erro no login").serverError();
+		}
+		
+	}
+	
+	private static String gerarSenha() {
+        String[] caracteres = { "1", "2", "3", "4", "5", "6", "7", "8",
+                "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
+                "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w",
+                "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I",
+                "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
+                "V", "W", "X", "Y", "Z", "?", "!", "@", "$", "&"};
+       
+        StringBuilder senha = new StringBuilder();
+
+        for (int i = 0; i < 8; i++) {
+            int posicao = (int) (Math.random() * caracteres.length);
+            senha.append(caracteres[posicao]);
+        }
+        return senha.toString();
+    }
+	
+}

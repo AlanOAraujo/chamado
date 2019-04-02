@@ -1,0 +1,46 @@
+package br.com.pagga.chamado.service;
+
+import javax.inject.Inject;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import br.com.pagga.chamado.dao.UsuarioDAO;
+import br.com.pagga.chamado.model.Usuario;
+import br.com.pagga.chamado.security.UsuarioLogado;
+import br.com.pagga.chamado.service.exception.BusinessException;
+
+public class LoginService {
+
+	private UsuarioDAO usuarioDAO;
+
+	private static final Logger logger = LoggerFactory.getLogger(LoginService.class);
+	
+	@Inject
+	public LoginService(UsuarioDAO usuarioDAO, UsuarioLogado usuarioLogado) {
+		this.usuarioDAO = usuarioDAO;
+	}
+
+	public Usuario autentificaLogin(Usuario usuario) {
+		
+		if (StringUtils.isBlank(usuario.getCpf())) {
+			throw new BusinessException("Campo cpf precisa ser preenchido");
+		}
+		
+		if (StringUtils.isBlank(usuario.getSenha())) {
+			throw new BusinessException("Campo senha precisa ser preenchida");
+		}
+		
+		try {
+			return usuarioDAO.autentificaLogin(usuario);
+		} catch (Exception e) {
+			//e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		
+		return null;
+		
+	}
+	
+}

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="../css/bootstrap.min.css">
+		<link rel="stylesheet" href="../css/all.css">
+		<link rel="stylesheet" href="../css/pagga.css?version=12">
+		<link rel="stylesheet" href="../css/pagga.roles.css?version=12">
+		<title>Chamado</title>
+	</head>
+	<body>
+		<div id="row-historico">
+			<div class="col-navegation">
+				<header class="header-navigation">
+					<nav class="navbar navbar-light navbar-telas" role="navigation">
+						<div class="div-imgPagga">
+							<img src="../images/paggacopyright.png" alt="Logo marca da Pagga"
+								class="img-responsive imgPagga" role="img">
+						</div>
+	
+						<div class="navbar-collapse collapse"
+							id="sidebar-navbar-collapse-1">
+							<div class="div-usuarioLogado">
+								<h5 id="usuarioLogadoH5"></h5>
+							</div>
+							<ul class="navbar-nav">
+								<li class="nav-item ACS_IND">
+									<a class="nav-link" href="../html/chamado.html"> 
+										Indicadores 
+									</a>
+								</li>
+								<li class="nav-item OPN_TCK">
+									<a class="nav-link" href="../html/chamado-novo.html">
+										Abrir Ticket
+									</a>
+								</li>
+								<li class="nav-item CAD_USR">
+									<a class="nav-link" href="../html/usuario.html">
+										Usuários
+									</a>
+								</li>
+								<li class="nav-item CAD_PRF">
+									<a class="nav-link" href="../html/perfil.html">
+										Perfil de acesso
+									</a>
+								</li>
+	
+								<li class="nav-item">
+									<a class="nav-link desloga" href="#">
+										Sair
+									</a>
+								</li>
+	
+							</ul>
+						</div>
+					</nav>
+				</header>
+			</div>
+			<div class="col-formulario">
+				<form id="formChamado" novalidate>
+	
+					<div class="container">
+						<h1 id="testeChamado"></h1>
+						<p class="paragrafo-info">
+							Todos os campos com "<strong class="campo-obrigatorio"> *
+							</strong>" são de preenchimento obrigatório
+						</p>
+						<div id='message' class='alert'></div>
+	
+						<div class="form-group" id="divTitulo"></div>
+	
+						<div class="row">
+							<section id="solicitanteSection" class="col-sm-3">
+								<div class="form-group" id="divSelectStatus">
+									<label for="selectStatus">Status</label> <select
+										id="selectStatus" class="form-control" disabled>
+										<option value="Aberto">Aberto</option>
+										<option value="Em atendimento">Em atendimento</option>
+										<option value="Fechado">Fechado</option>
+									</select>
+								</div>
+	
+								<div class="form-group FNZ_TCK" id="divBtnFechamento">
+									<button id="btnFechamento" type="button" class="btn btn-danger"
+										data-toggle="modal" data-target="#ModalFechamento">Finalizar
+										chamado</button>
+								</div>
+	
+								<div class="form-group SLN_TCK" id="divPrevisaoDate">
+									<label for="dataPrevisao">Previsão de solução <strong
+										class="campo-obrigatorio">*</strong></label> <input id="dataPrevisao"
+										type="date" class="form-control" name="dataPrevisao" required>
+								</div>
+	
+								<div class="form-group" id="divPrevisaoChamado">
+									<label for="dataPrevisaoChamado">Previsão de solução</label> <input
+										id="dataPrevisaoChamado" type="text" class="form-control"
+										name="dataPrevisaoChamado" disabled="disabled">
+								</div>
+	
+								<div class="form-group" id="divDataFechamento">
+									<label for="dataFechamento">Data de Finalização</label> 
+									<input id="dataFechamento" type="text"
+										class="form-control" name="dataFechamento" disabled="disabled">
+								</div>
+	
+								<input type="hidden" id="idUsuario" name="idUsuario"> <input
+									type="hidden" id="usuarioLogado" name="usuarioLogado"> <input
+									type="hidden" id="idChamado" name="idChamado">
+	
+								<div class="form-group" id="divNomeSolicitante">
+									<label for="nomeSolicitante">Solicitante</label> <input
+										id="nomeSolicitante" class="form-control" disabled="disabled">
+								</div>
+	
+								<div class="form-group" id="divUsuarioFechamento">
+									<label for="nomeUsuarioFechamento">Finalizado Por</label> <input
+										id="nomeUsuarioFechamento" class="form-control"
+										disabled="disabled">
+								</div>
+	
+								<div class="form-group" id="divCategoria">
+									<label for="categoria" style="width: 100%">Categoria</label> <input
+										id="categoria" class="form-control" disabled="disabled">
+								</div>
+	
+								<div class="form-group" id="divTags">
+									<label for="tags" style="width: 100%">Tags</label> <input
+										id="tags" class="form-control" disabled="disabled">
+								</div>
+	
+							</section>
+	
+							<section id="acaoSection" class="col-sm">
+	
+								<div class="form-group" id="divAcao">
+									<label for="acao">Ação pública <strong
+										class="campo-obrigatorio">*</strong></label>
+									<textarea class='form-control' name="comentario" rows="5"
+										id="acao" required></textarea>
+								</div>
+	
+								<div class="options-acao" id="divOptionsAcao">
+									<div class="float-left">
+										<input type="file" name="file" class="form-control-file"
+											id="anexoEvidencia">
+									</div>
+	
+									<div class='float-right'>
+										<button id='btnSalvaAcao' class='btn btn-primary' type="submit">Salvar</button>
+									</div>
+								</div>
+	
+								<div class="form-group" id="divHistoricos">
+									<label for="historicoDiv" style="width: 100%">Histórico</label>
+									<div id="historicoDiv" class="form-control border"></div>
+								</div>
+	
+							</section>
+	
+						</div>
+					</div>
+	
+				</form>
+			</div>
+		</div>
+		<div class="modal fade" id="ModalFechamento" tabindex="-1"
+			role="dialog" aria-labelledby="ModalFechamentoLabel"
+			aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<form id="formFinalizar">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="ModalFechamento">Informe o Motivo
+								por Finalizar este Chamado.</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<textarea class='form-control' name="comentario" rows="5"
+								id="acaoFinalizada"></textarea>
+						</div>
+						<div class="modal-footer">
+							<button id="btnFinalizar" type="button" class="btn btn-danger"
+								data-dismiss="modal">Finalizar</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	
+		<script type="text/javascript" src="../js/jquery.js"></script>
+		<script type="text/javascript" src="../js/pagga.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/all.js"></script>
+	
+		<script type="text/javascript">
+			$(document).ready(function() {
+				Pagga.login.verificaLogin().done(function(jqXHR) {
+		
+					let idUsuario = jqXHR.usuario.id;
+					let nomeUsuario = jqXHR.usuario.nome
+		
+					idUsuarioLogado = idUsuario;
+		
+					usuarioLogado(idUsuario, nomeUsuario)
+					
+					Pagga.login.usuarioRole().done(function(jqXHRole) {
+						let roles = jqXHRole.role.roles;
+						
+						const bjt_role = [];
+						
+						for (let i = 0; i < roles.length; i++) {
+							const role = roles[i];
+							bjt_role.push(role.codAtributo);
+						}
+						
+						bjt_role.forEach(function(e){
+							verificarRoles(e);
+						});
+						
+					});
+				
+				}).fail(function(erro) {
+						window.location.href = '../html/login.html';
+				});
+	
+				var url = new URL(window.location.href);
+				var id = url.searchParams.get("id");
+				history.replaceState(null, '','../html/historico.html');
+	
+				busca();
+	
+				$('#idChamado').val(id);
+	
+				let strong = $(document.createElement("strong"));
+				strong.append("Chamado " + id);
+				$("#testeChamado").append(strong);
+	
+				var chamado;
+	
+				var idSolicitante;
+	
+				var idUsuarioLogado;
+	
+				var form = $("#formChamado");
+	
+				var formFinalizar = $("#formFinalizar");
+	
+				var anexoSelector = $("#anexoEvidencia");
+	
+				$("#btnSalvaAcao").click(function(e) {
+					e.preventDefault();
+	
+					var form = document.getElementById('formChamado');
+	
+					if (!form.checkValidity()) {
+						e.stopPropagation();
+						form.classList.add('was-validated');
+						return;
+					}
+					debugger;
+					let comentario = $("#acao").val();
+					let idUsuario = $('#idUsuario').val();
+					let idChamado = $('#idChamado').val();
+					let dataPrevisaoChamado = $("#dataPrevisaoChamado").val()
+	
+					if (dataPrevisaoChamado == " ") {
+	
+						let dataPrevisao = new Date($('#dataPrevisao').val());
+						var dataFormatada = (dataPrevisao.getDate() + 1)
+								+ '/'
+								+ (dataPrevisao.getMonth() + 1)
+								+ '/'
+								+ dataPrevisao.getFullYear();
+					} else {
+						var dataFormatada = $('#dataPrevisaoChamado').val();
+					}
+	
+					if (anexoSelector.val() != "") {
+						const formulario = new FormData(form);
+						formulario.set('file',anexoSelector[0].files[0]);
+						formulario.set('idChamado',idChamado);
+						formulario.set('idUsuario',idUsuario);
+						formulario.set('comentario',comentario);
+						formulario.set('dataPrevisao',dataFormatada);
+	
+						Pagga.historico.salvar(formulario).done(function(data) {
+							busca();
+							$("#anexoEvidencia").val("");
+							$("#acao").val("");
+							exibeMensagem(data.msg,true);
+						}).fail(function(erro){
+							const json = JSON.parse(erro.responseText);
+							exibeMensagem(json.message);
+						});
+					} else {
+	
+						const formulario = new FormData(form);
+						formulario.set('idChamado',idChamado);
+						formulario.set('idUsuario',idUsuario);
+						formulario.set('comentario',comentario);
+						formulario.set('dataPrevisao',dataFormatada);
+						
+						debugger
+						
+						Pagga.historico.salvar(formulario).done(function(jqXHR) {
+							busca();
+							$("#acao").val("");
+							exibeMensagem(jqXHR.msg,true);
+						});
+	
+					}
+	
+				});
+	
+				$("#btnFinalizar").click(function(event) {
+					event.preventDefault();
+	
+					let comentario = $("#acaoFinalizada").val();
+					let idUsuario = $('#idUsuario').val();
+					let idChamado = $('#idChamado').val();
+	
+					formFinalizar = new FormData();
+					formFinalizar.append('idChamado',idChamado);
+					formFinalizar.append('idUsuario',idUsuario);
+					formFinalizar.append('comentario',comentario);
+	
+					Pagga.historico.finalizar(formFinalizar).done(
+						function(jqXHR) {
+							busca();
+	
+							exibeMensagem(jqXHR.msg,true);
+						}).fail(function(erro){
+							const json = JSON.parse(erro.responseText);
+							exibeMensagem(json.message);
+						});
+	
+				});
+	
+				function busca() {
+					Pagga.chamado.busca.id(id).done(function(jqXHR) {
+						$("#historicoDiv").empty();
+						chamado = JSON.parse(jqXHR).chamado;
+	
+						var chamadoStatus = chamado.status;
+	
+						idSolicitante = chamado.usuario.id;
+	
+						$("#nomeSolicitante").val(chamado.usuario.nome);
+						$("#selectStatus").val(chamadoStatus);
+						$("#categoria").val(chamado.tipo);
+						$("#dataPrevisaoChamado").val(chamado.dataPrevisao);
+						$("#nomeUsuarioFechamento").val(chamado.usuarioFechamento.nome);
+						$("#dataFechamento").val(chamado.dataFechamento);
+	
+						var usuarioLogado = $('#usuarioLogado').val();
+	
+						var objetoArray = chamado.marcacaoChamado;
+	
+						const descricao = objetoArray.map(function(index) {
+							return index['descricao'];
+						});
+	
+						$("#tags").val(descricao);
+	
+						chamado.historico.forEach(function(historico) {
+							let div = $(document.createElement("div"));
+							let h5 = $(document.createElement("h5"));
+							let h6 = $(document.createElement("h6"));
+							let strong = $(document.createElement("strong"));
+							let p = $(document.createElement("p"));
+							let i = $(document.createElement("i"));
+	
+							div.addClass("border-bottom historico-chamado");
+	
+							Pagga.usuario.busca(historico.usuario).done(function(jqXHR) {
+	
+								var usuario = JSON.parse(jqXHR);
+								h5.text(usuario.usuario.nome+ " "+ historico.dataComentario);
+							})
+							strong.text("Título chamado: "+ chamado.titulo);
+							p.text(historico.comentario);
+							h6.append(strong);
+							div.append(h5);
+							div.append(h6);
+							div.append(p);
+	
+							if (historico.anexo != "") {
+	
+								let link = $("<a>").addClass("btn-anexo");
+	
+								link.on("click",function(e) {
+									e.preventDefault();
+									let idHistorico = historico.id;
+									window.location.href = '../chamado/download/'+ idHistorico;
+	
+								});
+								i.addClass("fas fa-paperclip");
+								link.append(i);
+								h6.append(" ");
+								h6.append(link);
+							}
+							$("#historicoDiv").append(div);
+						});
+	
+						var campo = linhaChamado(
+								chamado.usuario.nome,
+								chamado.dataAbertura,
+								chamado.titulo,
+								chamado.descricao);
+	
+						$("#historicoDiv").append(campo);
+	
+						if (chamadoStatus == "Fechado") {
+							$('#divSelectStatus').show();
+							$('#divBtnFechamento').hide();
+							$('#divPrevisaoDate').hide();
+							$('#divPrevisaoChamado').hide();
+							$('#divDataFechamento').show();
+							$('#divNomeSolicitante').show();
+							$('#divUsuarioFechamento').show();
+							$('#divCategoria').show();
+							$('#divTags').show();
+							$('#divAcao').hide();
+							$('#divOptionsAcao').hide();
+							$('#divHistoricos').show();
+							$('#historicoDiv').css({"height" : "30rem"});
+	
+						} else if (chamadoStatus == "Aberto") {
+							$('#divSelectStatus').show();
+							$('#divBtnFechamento').hide();
+							$('#divPrevisaoDate').hide();
+							$('#divPrevisaoChamado').hide();
+							$('#divDataFechamento').hide();
+							$('#divNomeSolicitante').show();
+							$('#divUsuarioFechamento').hide();
+							$('#divCategoria').show();
+							$('#divTags').show();
+							$('#divAcao').show();
+							$('#divOptionsAcao').show();
+							$('#divHistoricos').show();
+	
+							usuarioSolicitante(idSolicitante,idUsuarioLogado);
+	
+						} else if (chamadoStatus == "Em atendimento") {
+							$('#divSelectStatus').show();
+							$('#divBtnFechamento').hide();
+							$('#divPrevisaoDate').hide();
+							document.getElementById("dataPrevisao").removeAttribute("required")
+							$('#divPrevisaoChamado').show();
+							$('#divDataFechamento').hide();
+							$('#divNomeSolicitante').show();
+							$('#divUsuarioFechamento').hide();
+							$('#divCategoria').show();
+							$('#divTags').show();
+							$('#divAcao').show();
+							$('#divOptionsAcao').show();
+							$('#divHistoricos').show();
+						}
+					});
+				}
+	
+				function usuarioSolicitante(idSolicitante,idUsuarioLogado) {
+	
+					if (idSolicitante == idUsuarioLogado) {
+						document.getElementById("dataPrevisao").removeAttribute("required");
+					}
+				}
+	
+				$('.desloga').on('click',function(event) {
+					event.preventDefault();
+					Pagga.login.desloga().done(function(jqXHR) {
+						window.location.href = '../html/login.html';
+					});
+	
+				});
+				
+				
+				function verificarRoles(e){
+					
+					Pagga.atributo.lista().done(function(jqXHRAtributo){
+						if(jqXHRAtributo. atributos.some(atributo => atributo.codAtributo === e)){
+							if(e == "CAD_USR"){
+								$(".CAD_USR").css({"display":"block"});
+							}else if(e == "CAD_PRF"){
+								$(".CAD_PRF").css({"display":"block"});
+							}else if(e == "ACS_IND"){
+								$(".ACS_IND").css({"display":"block"})
+							}else if(e == "OPN_TCK"){
+								$(".OPN_TCK").css({"display":"block"})
+							}
+							
+							else if(e == "FNZ_TCK"){
+								if(document.getElementById("selectStatus").value == "Fechado"){
+									$('#divBtnFechamento').hide();
+								}else{
+									$('#divBtnFechamento').show();
+								}
+							}else if(e == "SLN_TCK"){
+								if(document.getElementById("selectStatus").value == "Aberto"){
+									$('#divPrevisaoDate').show();
+								}else{
+									$('#divPrevisaoDate').hide();
+								}
+							}
+							
+						}else{
+							console.log("Não tem permissão")
+						}
+					});
+				}
+			});
+	
+			function linhaChamado(usuario, dataAbertura, titulo, descricao) {
+	
+				let div = $(document.createElement("div"));
+				let h5 = $(document.createElement("h5"));
+				let h6 = $(document.createElement("h6"));
+				let strong = $(document.createElement("strong"));
+				let p = $(document.createElement("p"));
+	
+				div.addClass("border-bottom chamado-aberto");
+	
+				h5.text(usuario + " " + dataAbertura);
+				strong.text("Título chamado: " + titulo);
+				p.text(descricao);
+	
+				h6.append(strong);
+				div.append(h5);
+				div.append(h6);
+				div.append(p);
+	
+				return div;
+	
+			}
+	
+			function exibeMensagem(msg, sucesso) {
+				if (sucesso) {
+					mostraDialogo('#message', 3000);
+					$('#message').text(msg);
+					$('#message').removeClass('hide');
+					$('#message').addClass('alert');
+					$('#message').addClass('alert-success');
+					$('#message').addClass('alert-dismissible');
+				} else {
+					mostraDialogo('#message', 3000);
+					$('#message').text(msg);
+					$('#message').removeClass('hide');
+					$('#message').addClass('alert');
+					$('#message').addClass('alert-danger');
+					$('#message').addClass('alert-dismissible');
+				}
+			}
+	
+			function mostraDialogo(mensagem, tempo) {
+	
+				$('#message').stop().fadeTo(1, 1).removeClass('hidden');
+	
+				setTimeout(function() {
+					$('#message').fadeTo(300, 0).slideUp(300, function() {
+						$('#message').text('').addClass('hidden');
+					});
+				}, tempo);
+			}
+	
+			function usuarioLogado(id, nome) {
+	
+				$('#idUsuario').val(id);
+				$('#usuarioLogado').val(nome);
+				$('#usuarioLogadoH5').text(nome);
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "3483f88a-743a-4ea3-957c-c24447b463a1",
+		"name": "Chamado - Chamado",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "idChamado",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": ""
+						},
+						{
+							"key": "descricao",
+							"value": "Teste de anexo de arquivo",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/chamado/chamado/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chamado",
+						"chamado",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lista Chamados Por Flitro",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"titulo\": \"Problemas Monitor\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/chamado/chamado/filtro",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chamado",
+						"chamado",
+						"filtro"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

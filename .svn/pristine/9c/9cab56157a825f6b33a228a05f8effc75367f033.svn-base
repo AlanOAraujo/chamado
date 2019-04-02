@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8'>
+		<title>Novo Ticket</title>
+		<link rel="stylesheet" href="../css/pagga.css?version=12">
+		<link rel='stylesheet' href='../css/bootstrap.min.css'>
+		<link rel='stylesheet' href='../css/jquery.tagsinput.css'>
+	</head>
+	<body>
+		
+		<form id="formTicket" novalidate>
+			
+			<div class="container">
+				<h1>Novo Ticket</h1>
+				<p class="paragrafo-info">Todos os campos com "<strong class="campo-obrigatorio"> * </strong>" são de preenchimento obrigatório</p>
+				
+				<div id='message' class='alert'></div>
+			
+				<div class="row">
+					<section id="solicitanteSection" class="col-sm-4">
+						
+						<input type="text" id="idUserInput" style="display: none">
+						<input type="hidden" id="idChamado" name="idChamado">
+						
+						<div class="form-group">
+						    <label for="solicitanteInput">Solicitante</label>
+						    <input type="text" class="form-control" id="solicitanteInput" readonly>
+					  	</div>
+					  	
+					  	<div class="form-group">
+					  		<label for="categoriaSelect">Categoria <strong class="campo-obrigatorio">*</strong></label>
+						  	<select id="categoriaSelect" class="form-control" required>
+						  		<option value="">Selecionar...</option>
+								<option value="INCIDENTE">Incidente</option>
+								<option value="SOLICITACAO">Solicitação</option>
+								<option value="RELATORIO">Relatório</option>
+								<option value="DUVIDA">Dúvida</option>
+							</select>
+						</div>
+						
+						<div class="form-group">
+						    <label for="tagsInput">Tags <strong class="campo-obrigatorio">*</strong> </label>
+						    <input id="tagsInput" type="text" class="tags form-control" />
+					  	</div>
+					  	
+					</section>	
+					
+					<section id="assuntoSection" class="col-sm">
+						
+						<div class="form-group">
+						    <label for="assuntoInput">Assunto <strong class="campo-obrigatorio">*</strong></label>
+						    <input type="text" class="form-control" id="assuntoInput" required>
+					  	</div>
+					
+						<div class="form-group">
+						    <label for="descricaoArea">Descrição <strong class="campo-obrigatorio">*</strong></label>
+						    <textarea id='descricaoArea' class='form-control' rows="5" required></textarea>
+					  	</div>
+					
+						<div class="float-left">
+							<input type="file" name="file" class="form-control-file" id="anexoTicket">
+						</div>
+							
+						<div class='float-right'>	
+							<button id='btnSalvaTicket' type="submit" class='btn btn-primary'>Salvar</button>						
+						</div>
+					
+					</section>
+				</div>	
+			</div>
+		</form>
+		
+		<script type="text/javascript" src="../js/jquery.js"></script>
+		<script type="text/javascript" src="../js/pagga.js"></script>
+		<script type="text/javascript" src="../js/jquery.tagsinput.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		
+		<script type="text/javascript">
+			$(document).ready(function() {
+				
+				usuarioLogado();
+
+				$('#tagsInput').tagsInput({width:'auto'});
+				
+				var form = document.getElementById('formTicket');
+				var btnSalvar = $("#btnSalvaTicket");
+				var anexoSelector = $("#anexoTicket");
+				
+				anexoSelector.change(function(event){
+					event.preventDefault();
+					form = new FormData(form);
+					form.append('file', event.target.files[0]);
+				});
+				
+				btnSalvar.click(function(e){
+					e.preventDefault();
+					
+	                if (!form.checkValidity()) {
+	                    e.stopPropagation();
+	                    form.classList.add('was-validated');
+	                    return;
+	                }
+					
+					let titulo = $('#assuntoInput').val();
+					let descricao = $('#descricaoArea').val();
+					let tipo = $('#categoriaSelect option:selected').val();
+					let usuario = $('#idUserInput').val();
+					let marcacoes = $('#tagsInput').val();
+
+					Pagga.chamado.salvar(titulo, descricao, tipo, usuario, marcacoes).done(function(jqXHR){
+						
+						if(anexoSelector.val() != ""){
+							
+							form.append('idChamado', jqXHR.idChamado);
+							
+							Pagga.chamado.anexo(form).done(function(data){
+								if (data.success){ 
+							        console.log("Arquivo anexado!");
+							    } else {
+							        alert("Erro ao anexar arquivo");
+							    }
+							}).fail(function(data){
+							    console.log(data);
+							    console.log("Erro ao anexar arquivo FAIL");
+							});
+						}
+						
+						exibeMensagem(jqXHR.msg, true);
+					}).fail(function(jqXHR) {
+						var error = JSON.parse(jqXHR.responseText);
+						exibeMensagem(error.message);
+					});	
+					
+				});
+				
+			});
+			
+			function usuarioLogado(){
+				Pagga.usuario.busca(1).done(function(jqXHR){
+					
+					let usuario = JSON.parse(jqXHR);
+					
+					$('#idUserInput').val(usuario.usuario.id); 
+					
+					$('#solicitanteInput').val(usuario.usuario.nome); 
+					
+				})
+			}
+
+			function exibeMensagem(msg, sucesso){
+				if(sucesso) {
+					mostraDialogo('#message', 3000);
+					$('#message').text(msg);
+					$('#message').removeClass('hide');
+					$('#message').addClass('alert');
+					$('#message').addClass('alert-success');
+					$('#message').addClass('alert-dismissible');
+				} else {
+					mostraDialogo('#message', 3000);
+					$('#message').text(msg);
+					$('#message').removeClass('hide');
+					$('#message').addClass('alert');
+					$('#message').addClass('alert-danger');
+					$('#message').addClass('alert-dismissible');
+				}
+			}
+			
+			function mostraDialogo(mensagem, tempo){
+				
+			    $('#message').stop().fadeTo(1, 1).removeClass('hidden');
+			    
+			    setTimeout(function() {
+			        $('#message').fadeTo(300, 0).slideUp(300, function(){
+			        	$('#message').text('').addClass('hidden');
+			        });
+			    }, tempo);
+			}
+
+			function limparForm(){
+				$('#assuntoInput').val("");
+				$('#descricaoArea').val("");
+				$('#categoriaSelect').val("");
+			}
+			
+		</script>
+	</body>
+</html>

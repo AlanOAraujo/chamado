@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='UTF-8'>
+<title>Perfil</title>
+<link rel='stylesheet' href='../css/bootstrap.min.css'>
+<link rel='stylesheet' href='../css/style.min.css'>
+<link rel="stylesheet" href="../css/pagga.css?version=12">
+<link rel="stylesheet" href="../css/pagga.roles.css?version=12">
+</head>
+<body>
+	
+	<div id="row-perfil-novo">
+		<div class="col-navegation">
+			<header class="header-navigation">
+				<nav class="navbar navbar-light navbar-telas" role="navigation">
+					<div class="div-imgPagga">
+						<img src="../images/paggacopyright.png" alt="Logo marca da Pagga" class="img-responsive imgPagga" role="img">
+					</div>	
+					
+					<div class="navbar-collapse collapse" id="sidebar-navbar-collapse-1">
+						<div class="div-usuarioLogado">
+							<h5 id="usuarioLogado" ></h5>
+						</div>
+						<ul class="navbar-nav">
+							<li class="nav-item ACS_IND">
+								<a class="nav-link" href="../html/chamado.html" >
+									Indicadores
+								</a>
+							</li>
+							<li class="nav-item OPN_TCK">
+								<a class="nav-link" href="../html/chamado-novo.html" >Abrir Ticket</a>
+							</li>
+							<li class="nav-item CAD_USR">
+								<a class="nav-link" href="../html/usuario.html">Usuários</a>
+							</li>
+							
+							<li class="nav-item CAD_PRF">
+								<a class="nav-link" href="../html/perfil.html">Perfil de acesso</a>
+							</li>
+							
+							<li class="nav-item">
+								<a class="nav-link desloga" href="#">Sair</a>
+							</li>
+							
+						</ul>
+					</div>
+				</nav>
+	        </header>
+		</div>
+		<div class="col-formulario">
+			<form id="formPerfil" novalidate>
+				
+				<div class="container">
+					<h1>Perfil de acesso</h1>
+					<p class="paragrafo-info">Todos os campos com "<strong class="campo-obrigatorio"> * </strong>" são de preenchimento obrigatório</p>
+			
+					<div id='message' class='alert' style="display: none"></div>
+			
+					<div class='form-group'>
+						<label for='codigo'>Código</label> 
+						<input class='form-control' id='codigo' name='codigo' readonly />
+					</div>
+					<div class='form-group'>
+						<label for='descricao'>Descricao <strong class="campo-obrigatorio">*</strong></label>
+						<textarea id='descricao' class='form-control' required></textarea>
+					</div>
+			
+					<div>
+						<div class="col-perfil-rotina">
+							<button id='btnRotina' data-toggle="modal" type="button"
+								data-target="#rotinaModal" class='btn btn-link ADD_RTN'>Rotinas</button>
+						</div>
+			
+						<div class="col-perfil">
+							<button id='btnSalva' type="submit" class='btn btn-primary'>Salvar</button>
+							<button id='btnExclui' type="button" class='btn btn-danger EXC_PRF'
+								data-toggle="modal" data-target="#excluirPerfilModal">Excluir</button>
+							<button id='btnNovo' class='btn btn-primary NOV_PRF'>Novo</button>
+							<a class="btn btn-primary" id="sair" style="margin-left: 0.5em" href="perfil.html">Sair</a>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>	
+	</div>
+	<div class="modal fade" id="excluirPerfilModal" tabindex="-1"
+		role="dialog" aria-labelledby="excluirPerfilModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="excluirPerfilModalLabel">Excluir
+						Perfil</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Deseja realmente excluir este Perfil?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="btnConfirmarExcluir" class="btn btn-danger"
+						data-dismiss="modal">Confirmar</button>
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Ignorar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="rotinaModal" tabindex="-1" role="dialog"
+		aria-labelledby="rotinaModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h6 class="modal-title" id="rotinaModalLabel">Rotinas</h6>
+				</div>
+
+				<div class="modal-body" id="divJstree"></div>
+
+				<div class="modal-footer">
+					<button type="button" id="btnConfimarRotinas" class="btn btn-primary" data-dismiss="modal">Confirmar</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Ignorar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src='../js/jquery.js'></script>
+	<script src='../js/pagga.js'></script>
+	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js/jstree.min.js"></script>
+
+	<script type='text/javascript'>
+		$(document).ready(function () {
+			
+			Pagga.login.verificaLogin().done(function(jqXHR) {
+				
+				usuarioLogado(jqXHR.usuario.nome);
+				
+				Pagga.login.usuarioRole().done(function(jqXHRole) {
+					let roles = jqXHRole.role.roles;
+					
+					const bjt_role = [];
+					
+					for (let i = 0; i < roles.length; i++) {
+						const role = roles[i];
+						bjt_role.push(role.codAtributo);
+					}
+					
+					bjt_role.forEach(function(e){
+						verificarRoles(e);
+					});
+					
+				});
+				
+			}).fail( function(erro){
+				window.location.href = window.localStorage.URL + 'chamado/html/login.html';
+			});
+			
+			currentPerfil = [];
+			
+			rotinaTree();
+			
+			var urlAnterior = document.referrer;
+			var url = new URL(window.location.href);
+	
+			codigo = url.searchParams.get("codigo");
+	
+			history.replaceState(null, '', '../html/perfil-novo.html');
+			
+			var form = document.getElementById('formPerfil');
+	
+			if (codigo != '') {
+				Pagga.perfil.busca.id(codigo).done(function (jqXHR) {
+					let perfil = JSON.parse(jqXHR).perfil;
+	
+					$("#descricao").val(perfil.descricao);
+					$("#codigo").val(perfil.id);
+					$("#descricao").prop("disabled",true);
+					$("#btnRotina").hide();
+					$("#btnSalva").hide();
+					atualizaBotoes();
+					
+					currentPerfil = [];
+					
+					perfil.perfilRotinaAtributo.forEach(function (value) {
+						currentPerfil.push(value.idAtributo);
+					});
+	
+					rotinaTree();
+				});
+			}
+	
+			$('#descricao').focus();
+			atualizaBotoes();
+	
+	
+			$("#btnRotina").click(function (event) {
+				event.preventDefault();
+				if (!$("#codigo").val() == " ") {
+					$('#divJstree').jstree().select_node(currentPerfil);
+				}else{
+					rotinaTree();
+				}
+			});
+	
+			$('#btnSalva').click(function (e) {
+				e.preventDefault();
+				
+				if (!form.checkValidity()) {
+                    e.stopPropagation();
+                    form.classList.add('was-validated');
+                    return;
+                }
+				
+				$('#message').removeClass();
+				$('#message').addClass('hide');
+				let codigo = $('#codigo').val();
+				let descricao = $('#descricao').val();
+				let perfilAtributoList = currentPerfil;
+	
+				Pagga.perfil.salva(codigo, descricao, perfilAtributoList).done(function (jqXHR) {
+	
+					let perfil = jqXHR.perfil;
+					$("#codigo").val(perfil.id);
+	
+					currentPerfil.length = 0;
+					atualizaBotoes();
+					exibeMensagem(perfil.msg, true);
+					$("#descricao").prop("disabled",true);
+					$("#btnRotina").hide();
+					$("#btnSalva").hide();
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					var error = JSON.parse(jqXHR.responseText);
+					exibeMensagem(error.message);
+				});
+	
+			});
+	
+			$('#btnConfirmarExcluir').click(function (e) {
+				e.preventDefault();
+	
+				let codigo = $('#codigo').val();
+	
+				Pagga.perfil.exclui(codigo).done(function (jqXHR) {
+					$('#codigo').val('');
+					$('#descricao').val('');
+					exibeMensagem(jqXHR.msg);
+					atualizaBotoes();
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					var error = JSON.parse(jqXHR.responseText);
+					exibeMensagem(error.message);
+				});
+			});
+	
+			$('#btnNovo').click(function (e) {
+				e.preventDefault();
+	
+				$('#codigo').val('');
+				$('#descricao').val('');
+				$('#message').hide();
+				atualizaBotoes();
+			});
+	
+			function atualizaBotoes() {
+				if ($('#codigo').val() == '') {
+					$('#btnExclui').hide();
+				} else {
+					$('#btnExclui').hide();
+					$('#btnNovo').hide();
+				}
+			}
+	
+			function exibeMensagem(msg, sucesso) {
+				if (sucesso) {
+					mostraDialogo('#message', 3000);
+					$('#message').text(msg);
+					$('#message').removeClass('hide');
+					$('#message').addClass('alert');
+					$('#message').addClass('alert-success');
+					$('#message').addClass('alert-dismissible');
+				} else {
+					mostraDialogo('#message', 3000);
+					$('#message').text(msg);
+					$('#message').removeClass('hide');
+					$('#message').addClass('alert');
+					$('#message').addClass('alert-danger');
+					$('#message').addClass('alert-dismissible');
+				}
+			}
+	
+			function rotinaTree() {
+				Pagga.perfil.lista.rotina().done(function (jqXHR) {
+	
+					let rotinas = jqXHR.rotinas;
+					const bjt_rotina = [];
+	
+					for (let i = 0; i < rotinas.length; i++) {
+						const rotina = rotinas[i];
+						let bjt_children = [];
+	
+						rotina.atributoList.forEach((value) => {
+							bjt_children.push({
+								"text": value.descricao,
+								"id": value.id
+							});
+						});
+	
+						bjt_rotina.push({
+							"text": rotina.descricao,
+							"children": bjt_children
+						});
+	
+					}
+	
+					$('#divJstree').jstree({
+						'core': {
+							'data': bjt_rotina
+						},
+						"checkbox": {
+							"keep_selected_style": false
+						},
+						"plugins": ["checkbox"]
+					});
+	
+					$("#btnConfimarRotinas").click(function (event) {
+						
+						event.preventDefault();	
+						
+						if (currentPerfil.length > 0) {
+							currentPerfil.length = 0;
+						}
+						
+						$('#divJstree').jstree("get_selected", true).forEach(function (data) {
+							if (data.parent != "#") {
+								currentPerfil.push(data.id);
+							}
+						});
+	
+					});
+	
+				});
+			}
+			
+			$('.desloga').on('click', function(event){
+				event.preventDefault();
+				
+				Pagga.login.desloga().done(function(jqXHR) {
+					window.location.href = '../html/login.html';
+				});
+
+			});
+			
+			function verificarRoles(e){
+				
+				Pagga.atributo.lista().done(function(jqXHRAtributo){
+					if(jqXHRAtributo. atributos.some(atributo => atributo.codAtributo === e)){
+						if(e == "CAD_USR"){
+							$(".CAD_USR").css({"display":"block"});
+						}else if(e == "CAD_PRF"){
+							$(".CAD_PRF").css({"display":"block"});
+						}else if(e == "ACS_IND"){
+							$(".ACS_IND").css({"display":"block"})
+						}else if(e == "OPN_TCK"){
+							$(".OPN_TCK").css({"display":"block"})
+						}
+						
+						else if(e == "EXC_PRF"){
+							$("#btnExclui").show();
+						}else if(e == "ADD_RTN"){
+							$("#btnRotina").show();
+							$("#btnSalva").show();
+						}else if(e == "DSC_PRF"){
+							$("#descricao").prop("disabled",false);
+							$("#btnSalva").show();
+						}else if(e == "NOV_PRF"){
+							$("#btnNovo").show();
+							$("#btnSalva").show();
+						}
+					}else{
+						console.log("Não tem permissão")
+						/* $('#btn-novoUsuario').css({"display":"none"}); */
+					}
+				});
+			}
+			
+		});
+	
+		function mostraDialogo(mensagem, tempo) {
+	
+			$('#message').stop().fadeTo(1, 1).removeClass('hidden');
+	
+			setTimeout(function () {
+				$('#message').fadeTo(300, 0).slideUp(300, function () {
+					$('#message').text('').addClass('hidden');
+				});
+			}, tempo);
+		}
+		
+		function usuarioLogado(nome) {
+			$("#usuarioLogado").text(nome);
+		}
+		
+	</script>
+</body>
+</html>

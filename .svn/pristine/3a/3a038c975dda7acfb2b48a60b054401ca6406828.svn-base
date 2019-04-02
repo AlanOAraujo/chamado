@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Perfil</title>
+<link rel="stylesheet" href="../css/bootstrap.min.css">
+</head>
+<body>
+	<main class="container">
+
+	<h1>Perfil de acesso</h1>
+
+<!-- 	<div class="alert alert-success alert-dismissible fade show"> -->
+<!-- 		<strong>Perfil salvo com sucesso!</strong> -->
+<!-- 	</div> -->
+<!-- 	<div class="alert alert-danger alert-dismissible fade show"> -->
+<!-- 		<strong>Campo descrição é obrigatório</strong> -->
+<!-- 	</div> -->
+
+	<div id="message" class="alert">
+		
+	</div>
+
+	<form>
+		<div class="form-group">
+			<label for="codigo">Código</label> <input class="form-control"
+				 id="codigo" name="codigo" readonly="readonly" />
+		</div>
+		<div class="form-group">
+			<label for="descricao">Descricao</label>
+			<textarea id="descricao" class="form-control"></textarea>
+		</div>
+	</form>
+
+	<div class="float-right">
+		<button id="btnSalva" class="btn btn-primary">Salvar</button>
+		<button id="btnExclui" class="btn btn-danger">Excluir</button>
+		<a href="perfil.html" id="btnVolta" class="btn btn-primary">Voltar</a>
+	</div>
+
+	</main>
+	
+	<script src="../js/jquery.js"></script>
+	<script src="../js/pagga.js"></script>
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+	
+		$('#btnSalva').click(function(e){
+			e.preventDefault();
+			
+			let codigo = $('#codigo').val();
+			let descricao = $('#descricao').val();
+			
+			Pagga.perfil.salva(codigo, descricao)
+				.done(function(data){
+					console.log(data);
+				})
+				.fail(function(jqXHR, textStatus, errorThrown){
+					var error = JSON.parse(jqXHR.responseText);
+					$('#message').text(error.message);
+					$('#message').removeClass('hide');
+					$('#message').addClass('alert-danger');
+					$('#message').addClass('alert-dismissible');
+				});
+			
+			});
+			
+			$('#btnExclui').click(function(e){
+				e.preventDefault();
+				
+				let codigo = $('#codigo').val();
+				
+				Pagga.perfil.exclui(codigo);
+			});
+		
+		});
+	</script>
+</body>
+</html>

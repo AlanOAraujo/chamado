@@ -1,0 +1,41 @@
+var Pagga = Pagga || {};
+
+Pagga.perfil = {};
+
+Pagga.perfil.salva = function(codigo, descricao){
+	
+	var obj = {
+		id : codigo,
+		descricao : descricao
+	};
+
+	return $.ajax({
+		  contentType: 'application/json',
+		  type: "POST",
+		  url: '../perfil',
+		  data: JSON.stringify(obj),
+		  dataType: 'json'
+	});
+	
+}
+
+Pagga.perfil.exclui = function(codigo){
+	
+	console.log('Registro excluído com sucesso');
+	
+	console.log(codigo);
+	
+}
+
+Pagga.perfil.lista = function( ){
+	
+	let request = $.ajax({
+	  method: "GET",
+	  /*type: "GET",*/
+	  url: "../perfil",
+	  dataType: "json"
+	});
+	
+	return request; 
+	
+}
